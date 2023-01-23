@@ -15,7 +15,6 @@
                     <i class="fas fa-plus"></i></a>
             </div>
         </div>
-        <!-- /.card-header -->
         <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
@@ -60,7 +59,6 @@
 
             </table>
         </div>
-        <!-- /.card-body -->
     </div>
 @endsection
 @section('js')

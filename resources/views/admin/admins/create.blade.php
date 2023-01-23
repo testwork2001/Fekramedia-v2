@@ -98,9 +98,5 @@
     </div>
 @endsection
 @section('js')
-    <script>
-        function UpdatePreview() {
-            $('#image').attr('src', URL.createObjectURL(event.target.files[0]));
-        };
-    </script>
+    @include('admin.layouts.imgperview-script')
 @endsection

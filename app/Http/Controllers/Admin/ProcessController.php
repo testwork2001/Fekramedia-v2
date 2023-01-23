@@ -3,16 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Service\StoreServiceRequest;
-use App\Models\Category;
-use App\Models\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class ServiceController extends Controller
+class ProcessController extends Controller
 {
-    private const AVAILABLE_STATUS = ['0' => 'Not Active', '1' => 'Active'];
-
     /**
      * Display a listing of the resource.
      *
@@ -20,8 +14,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        $services  = Service::with('category')->get();
-        return view('admin.services.index', compact('services'));
+        //
     }
 
     /**
@@ -31,7 +24,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view('admin.services.create' , ['categories'=> Category::where('status' , '1')->get() , 'statuses'=> self::AVAILABLE_STATUS]);
+        //
     }
 
     /**
@@ -40,9 +33,9 @@ class ServiceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreServiceRequest $request)
+    public function store(Request $request)
     {
-        dd($request->all());
+        //
     }
 
     /**
@@ -85,16 +78,8 @@ class ServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Service $service)
+    public function destroy($id)
     {
-        DB::beginTransaction();
-        try {
-            $service->delete();
-            DB::commit();
-            return redirect()->route('services.index')->with('success', "it {$service->name} is Deleted Successfully!");
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->route('services.index')->with('error', 'Something went Wroing!');
-        }
+        //
     }
 }
