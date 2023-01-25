@@ -2,8 +2,8 @@
 @section('title', 'Add a new Price')
 @section('current_page', 'Add a new Price')
 @section('content')
-@include('admin.layouts.requesterrors')
-@include('admin.layouts.success')
+    @include('admin.layouts.requesterrors')
+    @include('admin.layouts.success')
     <div class="card ">
         <div class="card-header">
             <h2 class="text-center">Please Enter Pricing Data</h2>
@@ -14,23 +14,23 @@
                 <div class="form-group">
                     <label for="name">Pricing Name</label>
                     <input class="form-control form-control-lg" id="status"type="text" placeholder="Pricing Name"
-                        name="name" value="{{ old('pricing.name') }}">
+                        name="name" value="{{ old('name') }}">
                 </div>
                 <div class="form-group">
                     <label for="price">Price</label>
                     <input class="form-control form-control-lg" id="price"type="text" placeholder="Price"
-                        name="price" value="{{ old('pricing.price') }}">
+                        name="price" value="{{ old('price') }}">
                 </div>
                 <div class="form-group">
                     <label for="icon">Pricing Icon</label>
                     <input class="form-control form-control-lg" id="icon" type="text" placeholder="Pricing Icone"
-                        name="icon" value="{{ old('pricing.icon') }}">
+                        name="icon" value="{{ old('icon') }}">
                 </div>
                 <div class="from-group">
                     <label for="status">Status</label>
                     <select name="status" id="status" class="form-control form-control-lg">
                         @foreach ($statuses as $key => $value)
-                            <option value="{{ $key }}" {{ old('pricing.status') == $key ? 'selected' : '' }}>
+                            <option value="{{ $key }}" {{ old('status') == $key ? 'selected' : '' }}>
                                 {{ $value }}</option>
                         @endforeach
                     </select>

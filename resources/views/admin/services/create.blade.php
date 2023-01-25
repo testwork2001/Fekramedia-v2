@@ -11,7 +11,7 @@
         <div class="card-header">
             <h2 class="text-center">Please Enter Service Data</h2>
         </div>
-        <form action="{{ route('services.store') }}" method="post">
+        <form action="{{ route('services.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="card-body form_page" id="page1">
                 <div class="form-group">
@@ -26,9 +26,11 @@
                 </div>
                 <div class="from-group">
                     <label for="category_id">Category Name</label>
-                    <select name="category_id" id="category_id" class="form-control form-control-lg">
+                    <select name="service[category_id]" id="category_id" class="form-control form-control-lg">
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" {{old('service.category_id') == $category->id ? 'selected' : ''}}>{{ $category->name }}</option>
+                            <option value="{{ $category->id }}"
+                                {{ old('service.category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
@@ -36,13 +38,14 @@
                     <label for="status">Status</label>
                     <select name="service[status]" id="status" class="form-control form-control-lg">
                         @foreach ($statuses as $key => $value)
-                            <option value="{{ $key }}" {{old('service.status') == $key ? 'selected' : ''}}>{{ $value }}</option>
+                            <option value="{{ $key }}" {{ old('service.status') == $key ? 'selected' : '' }}>
+                                {{ $value }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group my-3">
                     <label for="summernote">Details</label>
-                    <textarea id="summernote" name="details">
+                    <textarea id="summernote" name="service[details]">
                       {{ old('service.details') ?? 'Service is Very Good' }}
                     </textarea>
                 </div>
@@ -61,17 +64,17 @@
                     <div class="entry">
                         <div class="form-group">
                             <label for="name">Process Name</label>
-                            <input class="form-control form-control-lg" type="text" placeholder="Process Name"
+                            <input class="form-control form-control-lg names" type="text" placeholder="Process Name"
                                 name="processes[0][name]">
                         </div>
                         <div class="form-group">
                             <label for="icon">Process Icon</label>
-                            <input class="form-control form-control-lg" type="text" placeholder="Process Icone"
+                            <input class="form-control form-control-lg icons" type="text" placeholder="Process Icone"
                                 name="processes[0][icon]">
                         </div>
                         <div class="from-group">
                             <label>Process Status</label>
-                            <select name="processes[0][status]" class="form-control form-control-lg">
+                            <select name="processes[0][status]" class="form-control form-control-lg statuses">
                                 @foreach ($statuses as $key => $value)
                                     <option value="{{ $key }}">{{ $value }}</option>
                                 @endforeach
@@ -79,19 +82,19 @@
                         </div>
                         <div class="form-group my-3">
                             <label>Details</label>
-                            <textarea name="processes[0][details]" class="form-control " rows="10">procces is very good
+                            <textarea name="processes[0][details]" class="form-control details " rows="10">procces is very good
                          </textarea>
                         </div>
                         <div class="form-group">
                             <label>Upload Image</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="processes[0][image]"> 
+                                    <input type="file" class="custom-file-input images" name="processes[0][image]">
                                     <label class="custom-file-label">Choose image</label>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary btn-sm btn-add" >
+                        <button type="button" class="btn btn-primary btn-sm btn-add">
                             Add new Process
                         </button>
                     </div>
@@ -118,7 +121,6 @@
 @section('js')
     @include('admin.layouts.summernote-script')
     @include('admin.layouts.imgperview-script')
-    @include('admin.layouts.formrepeater-script')
     <script>
         $('#next').on('click', function() {
             $('#page1').addClass('d-none')
@@ -133,5 +135,38 @@
             $(this).addClass('disabled')
             $('#next').removeClass('disabled')
         })
+
+        $(function() {
+            $(document).on('click', '.btn-add', function(e) {
+
+                e.preventDefault();
+                var controlForm = $('.fvrduplicate:first'),
+                    currentEntry = $(this).parents('.entry:first'),
+                    newEntry = $(currentEntry.clone()).appendTo(controlForm);
+                let names = $('.names');
+                let statuses = $('.statuses');
+                let images = $('.images');
+                let details = $('.details');
+                let icons = $('.icons');
+
+                for (let i = 0; i < names.length; i++) {
+                    names[i].setAttribute('name', `processes[${i}][name]`)
+                    icons[i].setAttribute('name', `processes[${i}][icon]`)
+                    statuses[i].setAttribute('name', `processes[${i}][status]`)
+                    images[i].setAttribute('name', `processes[${i}][image]`)
+                    details[i].setAttribute('name', `processes[${i}][details]`)
+
+                }
+                newEntry.find('input').val('');
+                controlForm.find('.entry:not(:last) .btn-add')
+                    .removeClass('btn-add').addClass('btn-remove')
+                    .removeClass('btn-success').addClass('btn-danger')
+                    .html('remove');
+            }).on('click', '.btn-remove', function(e) {
+                e.preventDefault();
+                $(this).parents('.entry:first').remove();
+                return false;
+            });
+        });
     </script>
 @endsection

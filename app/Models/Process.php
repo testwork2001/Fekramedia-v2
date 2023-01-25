@@ -9,5 +9,10 @@ class Process extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name' , 'details' , 'icon' , 'status' , 'image' , 'service_id'];
+    protected $fillable = ['name', 'details', 'icon', 'status', 'image', 'service_id'];
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
 }

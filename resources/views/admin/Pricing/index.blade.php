@@ -32,7 +32,7 @@
                     <tr>
                         <td class="text-center">{{ $plan->name }} </td>
                         <td class="text-center"><span class="text-white"><?= $plan->icon ?></span></td>
-                        <td >
+                        <td>
                             <ul>
                                 @foreach (json_decode($plan->features) as $feature)
                                     <li>{{ $feature }}</li>
@@ -45,9 +45,6 @@
                         <td class="text-center">{{ $plan->created_at }}</td>
                         <td class="text-center">{{ $plan->updated_at }}</td>
                         <td class="text-center">
-                            <a href="{{ route('pricing.show', $plan->id) }}" class="btn btn-success mb-1">View
-                                <i class="fas fa-folder">
-                                </i></a>
                             <a href="{{ route('pricing.edit', $plan->id) }}" class='btn btn-warning mb-1'>Edit <i
                                     class="fas fa-pencil-alt">
                                 </i></a>

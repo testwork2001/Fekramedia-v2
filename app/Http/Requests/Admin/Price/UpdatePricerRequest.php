@@ -23,13 +23,14 @@ class UpdatePricerRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
-            'name' => ['required', 'string', "unique:pricing,name,{$this->id},id"],
+            'name' => ['required', 'string', "unique:pricing,name,{$this->pricing},id"],
             'price' => ['required', 'numeric', 'min:1'],
             'status' => ['required', 'in:1,0'],
             'icon' => ['required', 'string', 'starts_with:<i class=', 'ends_with:</i>'],
             'features' => ['required', 'array'],
-            'features.*' => ['required', 'string'],
+            'features.*' => ['nullable', 'string'],
         ];
     }
 }

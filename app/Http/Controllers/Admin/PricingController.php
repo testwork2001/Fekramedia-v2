@@ -7,12 +7,12 @@ use App\Http\Requests\Admin\Price\StorePriceRequest;
 use App\Http\Requests\Admin\Price\UpdatePricerRequest;
 use App\Models\Price;
 use App\Services\GenerateSlug;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\Formater;
 
 class PricingController extends Controller
 {
-    private const AVAILABLE_STATUS = ['0' => 'Not Active', '1' => 'Active'];
+    private const AVAILABLE_STATUS = [0 => 'Not Active', 1 => 'Active'];
 
     /**
      * Display a listing of the resource.
@@ -46,7 +46,7 @@ class PricingController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->except('_token', 'create_return', 'features');
-            $data['features'] =  json_encode($request->safe()->features);
+            $data['features'] =  json_encode(Formater::format($request->safe()->features));
             $data['slug'] = GenerateSlug::make($request->safe()->name);
             Price::create($data);
             DB::commit();
@@ -93,7 +93,7 @@ class PricingController extends Controller
         try {
             $price = Price::findOrFail($id);
             $data = $request->except('_token', 'features');
-            $data['features'] =  json_encode($request->safe()->features);
+            $data['features'] =  json_encode(Formater::format($request->safe()->features));
             $data['slug'] = GenerateSlug::make($request->safe()->name);
             $price->update($data);
             DB::commit();

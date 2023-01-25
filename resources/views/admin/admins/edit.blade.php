@@ -8,7 +8,7 @@
             <div class="card-body">
                 <h4 class="login-box-msg">Edit for {{ $admin->name }}</h4>
 
-                <form method="POST" action="{{ route('admins.update' , $admin->id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('admins.update', $admin->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="input-group mb-3">
@@ -43,7 +43,7 @@
                         <select class="form-control" name="status" id="status">
                             <option value="" disabled></option>
                             @foreach ($statuses as $key => $value)
-                                <option value="{{ $key }}" {{$admin->status == $key ? 'selected' : '' }} >
+                                <option value="{{ $key }}" {{ $admin->status[1] == $value ? 'selected' : '' }}>
                                     {{ $value }}</option>
                             @endforeach
                         </select>
@@ -53,9 +53,11 @@
                         <label for="email_verified_at" class="col-12">Email verified </label>
                         <select class="form-control" name="email_verified_at" id="email_verified_at">
                             <option value="" disabled></option>
-                            <option value="0" {{$admin->email_verified_at == null ? "selected": ""}}>Not Verified
+                            <option value="0" {{ $admin->email_verified_at[1] != 'Verified' ? 'selected' : '' }}>Not
+                                Verified
                             </option>
-                            <option value="1"{{$admin->email_verified_at != null ? "selected": ""}}>Verified</option>
+                            <option value="1"{{ $admin->email_verified_at[1] == 'Verified' ? 'selected' : '' }}>Verified
+                            </option>
                         </select>
                     </div>
                     <div class="input-group mb-3">
@@ -87,9 +89,10 @@
                     </div>
                     <div class="row justify-content-center">
                         <div class="col-12 col-md-4 my-1">
-                            <button type="submit" class="btn btn-success btn-block" name="create_return">Save Change</button>
+                            <button type="submit" class="btn btn-success btn-block" name="create_return">Save
+                                Change</button>
                         </div>
-                       
+
                     </div>
                 </form>
             </div>

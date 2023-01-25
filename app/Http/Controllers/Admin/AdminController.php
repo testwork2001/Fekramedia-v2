@@ -75,6 +75,7 @@ class AdminController extends Controller
      */
     public function edit(Admin $admin)
     {
+     
         return view('admin.admins.edit', ['admin' => $admin, 'statuses' => self::AVAILABLE_STATUS]);
     }
 

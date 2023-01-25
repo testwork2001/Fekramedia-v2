@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Service\StoreServiceRequest;
 use App\Models\Category;
 use App\Models\Service;
+use App\Services\GenerateSlug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
-    private const AVAILABLE_STATUS = ['0' => 'Not Active', '1' => 'Active'];
+    private const AVAILABLE_STATUS = [0 => 'Not Active', 1 => 'Active'];
 
     /**
      * Display a listing of the resource.
@@ -31,7 +32,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view('admin.services.create' , ['categories'=> Category::where('status' , '1')->get() , 'statuses'=> self::AVAILABLE_STATUS]);
+        return view('admin.services.create', ['categories' => Category::where('status', '1')->get(), 'statuses' => self::AVAILABLE_STATUS]);
     }
 
     /**
@@ -42,7 +43,18 @@ class ServiceController extends Controller
      */
     public function store(StoreServiceRequest $request)
     {
-        dd($request->all());
+        DB::beginTransaction();
+        try {
+            $serviceData  = $request->safe()->service;
+            $serviceData['slug'] = GenerateSlug::make($serviceData['name']);
+            $serviceModel = Service::create($serviceData);
+            $serviceModel->addMediaFromRequest('image')->toMediaCollection('services');
+            
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('services.index')->with('error', 'Something went wroing!');
+        }
     }
 
     /**
